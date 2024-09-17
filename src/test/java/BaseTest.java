@@ -3,10 +3,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.*;
-import utilities.PropertyUtils;
-
 import static org.hamcrest.Matchers.equalTo;
-
 
 public abstract class BaseTest {
     protected UserClient userClient;

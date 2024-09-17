@@ -1,12 +1,8 @@
-import clients.UserClient;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utilities.AdvancedAssertions;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
 
 public class LoginTest extends BaseTest {
     private String uniqueEmail;
@@ -31,7 +27,6 @@ public class LoginTest extends BaseTest {
         // Assert multiple payload values (if needed)
         AdvancedAssertions.assertPayloadContains(loginResponse, "data.user.email", uniqueEmail);
     }
-
 
     @AfterMethod
     public void tearDown() {
