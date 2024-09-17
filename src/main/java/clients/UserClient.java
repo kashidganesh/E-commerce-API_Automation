@@ -50,7 +50,7 @@ public class UserClient {
 
     // New method to delete a user by userId
     public Response deleteUser(String userId) {
-        return given().when().delete("/api/auth/delete" + userId);
+        return given().when().delete("/api/auth/delete/" + userId);
     }
 
 }

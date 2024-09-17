@@ -55,4 +55,12 @@ public class AdvancedAssertions {
         String responseBody = response.getBody().asString();
         assertTrue(responseBody.contains(expectedValue), "Assertion failed: Response body does not contain expected value [" + expectedValue + "]. Response body: " + responseBody);
     }
+
+    // Utility method for logging errors and throwing exceptions
+    public static void handleError(String message) {
+        // Log the error message
+        System.err.println("[ERROR]: " + message);
+        // Throw a runtime exception with the error message
+        throw new RuntimeException(message);
+    }
 }
