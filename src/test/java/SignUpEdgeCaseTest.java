@@ -15,7 +15,7 @@ public class SignUpEdgeCaseTest extends BaseTest {
         Response response = userClient.createUser(existingEmail, password);
 
         // Expecting a 400 Bad Request status code due to duplicate email
-        AdvancedAssertions.assertStatusCode(response, 401);
+        AdvancedAssertions.assertStatusCode(response, 400);
         // Assuming the response contains a specific error message for duplicate email
         AdvancedAssertions.assertJsonPathValue(response, "error", "User already registered");
     }
