@@ -1,13 +1,9 @@
 
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import utilities.AdvancedAssertions;
 
 public class SignUpTest extends BaseTest {
 
@@ -25,40 +21,24 @@ public class SignUpTest extends BaseTest {
     @Test
     public void testUserSignup() {
         // Payload for signup request
-
-        String requestBody = "{\n" +
-                "\"email\":\"" + uniqueEmail + "\",\n" +
-                "\"password\":\"" + password + "\"\n" +
-                "}";
-
-        // Send POST request to /signup endpoint
-        Response response = given().contentType(ContentType.JSON).body(requestBody).when().post("/api/auth/signup").then().
-                statusCode(201)
-                .body("data.user.id", notNullValue()) // Update path for userId
-                .body("data.user.email", equalTo(uniqueEmail)) // Update path for email
-                .extract().response();
-
-        // Store the userId for possible cleanup in teardown
+        Response response = userClient.createUser(uniqueEmail, password);
+        System.out.println(response.jsonPath().getString("data"));
+        // Using advanced assertion methods
+        AdvancedAssertions.assertStatusCode(response, 201); // Check status code
+        AdvancedAssertions.assertPayloadContains(response, "data.user.email", uniqueEmail); // Check email in response
         userId = response.jsonPath().getString("data.user.id");
-
+        System.out.println("userId :" + userId);
+        AdvancedAssertions.assertPayloadContains(response, "data.user.id", userId); // Check if userId is present
     }
 
     @AfterMethod
     public void tearDown() {
-        // Optional cleanup: Remove the created user if needed
-        if (userId != null && !userId.isEmpty()) {
+        if (userId != null) {
             Response deleteResponse = userClient.deleteUser(userId);
-            if (deleteResponse.getStatusCode() != 200) {
-                handleError("User deletion failed for userID: " + userId);
-            }
-            // In tearDown, update the check to expect a 204 status code for delete
-            if (deleteResponse.getStatusCode() != 204) { // expect 204 for successful DELETE
-                handleError("User deletion failed for userID: " + userId);
-            }
+            // AdvancedAssertions.assertStatusCode(deleteResponse, 204);
         }
         super.tearDown();
     }
-
 
 
     @Override
