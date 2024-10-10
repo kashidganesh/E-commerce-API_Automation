@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import models.UserLoginRequest;
+import pojos.LoginResponseModel;
 import pojos.SignupResponseModel;
 import utilities.PropertyUtils;
 
@@ -55,7 +56,7 @@ public class UserClient {
     }
 
     // Method to authenticate an existing user (login)
-    public Response authenticateUser(String email, String password) {
+    public ApiResponseWrapper<LoginResponseModel> authenticateUser(String email, String password) {
     /*    String requestBody = "{\n" +
                 "\"email\":\"" + email + "\",\n" +
                 "\"password\":\"" + password + "\"\n" +
@@ -70,10 +71,12 @@ public class UserClient {
                 .password(password)
                 .build();
 
-        return given().contentType(ContentType.JSON)
-                .body(loginRequest) // Serialize POJO to JSON
-                .when()
-                .post("/api/auth/login");
+        Response response = given().contentType(ContentType.JSON)
+                .body(loginRequest)
+                .when().post("/api/auth/login");
+
+        return ApiResponseDeserializer.deserializeResponse(response, LoginResponseModel.class);
+
 
 
     }

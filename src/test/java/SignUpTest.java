@@ -37,7 +37,8 @@ public class SignUpTest extends BaseTest {
         AdvancedAssertions.assertPayloadContains(response, "data.user.id", userId); // Check if userId is present*/
 
          /*Assert the status code*/
-        assertEquals(responseWrapper.getStatusCode(), 200, "Expected status code to be 200");
+       // assertEquals(responseWrapper.getStatusCode(), 200, "Expected status code to be 200");
+        assertEquals(responseWrapper.getStatusCode(), 201, "Expected status code to be 201");
 
         // Assert the headers
         assertTrue(responseWrapper.getHeaders().containsKey("Content-Type"));
@@ -46,6 +47,11 @@ public class SignUpTest extends BaseTest {
         // Assert the response body fields
         assertNotNull(signupResponse.getUserId(), "User ID should not be null");
         assertNotNull(signupResponse.getToken(), "Token should not be null");
+
+        // Assert body
+        SignupResponseModel responseBody = responseWrapper.getBody();
+        assertEquals(responseBody.getEmail(), uniqueEmail, "Expected email to match the one provided in the request");
+
     }
 
     @AfterMethod

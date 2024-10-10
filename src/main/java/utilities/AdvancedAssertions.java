@@ -69,4 +69,10 @@ public class AdvancedAssertions {
         Assert.assertEquals(actualValue, expectedValue,
                 "Expected value for field '" + field + "' is " + expectedValue + " but found " + actualValue);
     }
+
+    public void assertStatusCode(int actual, int expected) {
+        if (actual != expected) {
+            throw new AssertionError("Expected status code: " + expected + ", but got: " + actual);
+        }
+    }
 }
