@@ -1,4 +1,5 @@
 import io.restassured.response.Response;
+import models.UserSignupResponse;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -22,6 +23,9 @@ public class SignUpTest extends BaseTest {
         // Payload for signup request
         Response response = userClient.createUser(uniqueEmail, password);
         System.out.println(response.jsonPath().getString("data"));
+
+        // Deserialize response into UserSignupResponse POJO
+        UserSignupResponse signupResponse = response.as(UserSignupResponse.class);
         // Using advanced assertion methods
         AdvancedAssertions.assertStatusCode(response, 201); // Check status code
         AdvancedAssertions.assertPayloadContains(response, "data.user.email", uniqueEmail); // Check email in response

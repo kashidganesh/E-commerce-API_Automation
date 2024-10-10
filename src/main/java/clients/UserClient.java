@@ -3,6 +3,7 @@ package clients;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import models.UserSignupRequest;
 import utilities.PropertyUtils;
 
 import static io.restassured.RestAssured.given;
@@ -27,13 +28,25 @@ public class UserClient {
 
     // Method to create a new user (signup)
     public Response createUser(String email, String password) {
-        String requestBody = "{\n" +
+       /* String requestBody = "{\n" +
                 "\"email\":\"" + email + "\",\n" +
                 "\"password\":\"" + password + "\"\n" +
                 "}";
 
+        return given().contentType(ContentType.JSON).body(requestBody).when().post("/api/auth/signup");*/
+
+
+        UserSignupRequest signupRequest = UserSignupRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
+
+        return given().contentType(ContentType.JSON)
+                .body(signupRequest)  // Serialize POJO to JSON here
+                .when()
+                .post("/api/auth/signup");
         // Send POST request to /signup endpoint
-        return given().contentType(ContentType.JSON).body(requestBody).when().post("/api/auth/signup");
+
     }
 
     // Method to authenticate an existing user (login)
