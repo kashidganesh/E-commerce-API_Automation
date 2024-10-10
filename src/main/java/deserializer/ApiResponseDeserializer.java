@@ -13,18 +13,24 @@ public class ApiResponseDeserializer<T> {
     public ApiResponseDeserializer(Class<T> responseClass) {
         this.responseClass = responseClass;
     }
-        // Method to handle the complete deserialization process
-        public ApiResponseWrapper<T> deserializeResponse (Response response){
+
+    // Method to handle the complete deserialization process
+    public ApiResponseWrapper<T> deserializeResponse(Response response) {
+        try {
             // Deserialize the body
             T responseBody = response.as(responseClass);
 
             // Get status code and headers
             int statusCode = response.getStatusCode();
-            Map<String, String> headers = response.getHeaders().asList().stream()
-                    .collect(Collectors.toMap(header -> header.getName(), header -> header.getValue()));
+            Map<String, String> headers = response.getHeaders().asList().stream().collect(Collectors.toMap(header -> header.getName(), header -> header.getValue()));
 
             // Wrap all parts of the response
             return new ApiResponseWrapper<>(statusCode, headers, responseBody);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deserialize the response: " + e.getMessage());
         }
+
+
+    }
 
 }
