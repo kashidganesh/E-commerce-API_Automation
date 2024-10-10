@@ -69,5 +69,4 @@ public class AdvancedAssertions {
         Assert.assertEquals(actualValue, expectedValue,
                 "Expected value for field '" + field + "' is " + expectedValue + " but found " + actualValue);
     }
-
 }
