@@ -63,4 +63,11 @@ public class AdvancedAssertions {
         // Throw a runtime exception with the error message
         throw new RuntimeException(message);
     }
+
+    public static void assertJsonField(Response response, String field, Object expectedValue) {
+        Object actualValue = response.jsonPath().get(field);
+        Assert.assertEquals(actualValue, expectedValue,
+                "Expected value for field '" + field + "' is " + expectedValue + " but found " + actualValue);
+    }
+    }
 }
