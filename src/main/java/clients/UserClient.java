@@ -3,6 +3,7 @@ package clients;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import models.UserLoginRequest;
 import models.UserSignupRequest;
 import utilities.PropertyUtils;
 
@@ -51,14 +52,26 @@ public class UserClient {
 
     // Method to authenticate an existing user (login)
     public Response authenticateUser(String email, String password) {
-        String requestBody = "{\n" +
+    /*    String requestBody = "{\n" +
                 "\"email\":\"" + email + "\",\n" +
                 "\"password\":\"" + password + "\"\n" +
                 "}";
         return RestAssured.given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
+                .post("/api/auth/login");*/
+
+        UserLoginRequest loginRequest = UserLoginRequest.builder()
+                .email(email)
+                .password(password)
+                .build();
+
+        return given().contentType(ContentType.JSON)
+                .body(loginRequest) // Serialize POJO to JSON
+                .when()
                 .post("/api/auth/login");
+
+
     }
 
     // New method to delete a user by userId
