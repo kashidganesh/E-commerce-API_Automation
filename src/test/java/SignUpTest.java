@@ -1,9 +1,15 @@
+import deserializer.ApiResponseWrapper;
 import io.restassured.response.Response;
 import models.UserSignupResponse;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pojos.SignupResponseModel;
 import utilities.AdvancedAssertions;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertTrue;
 
 public class SignUpTest extends BaseTest {
 
@@ -21,17 +27,25 @@ public class SignUpTest extends BaseTest {
     @Test
     public void testUserSignup() {
         // Payload for signup request
-        Response response = userClient.createUser(uniqueEmail, password);
-        System.out.println(response.jsonPath().getString("data"));
+        ApiResponseWrapper<SignupResponseModel> responseWrapper  = userClient.createUser(uniqueEmail, password);
+        SignupResponseModel signupResponse = responseWrapper.getResponseBody();
 
-        // Deserialize response into UserSignupResponse POJO
-        UserSignupResponse signupResponse = response.as(UserSignupResponse.class);
-        // Using advanced assertion methods
+       /* // Using advanced assertion methods
         AdvancedAssertions.assertStatusCode(response, 201); // Check status code
         AdvancedAssertions.assertPayloadContains(response, "data.user.email", uniqueEmail); // Check email in response
-        userId = response.jsonPath().getString("data.user.id");
-        System.out.println("userId :" + userId);
-        AdvancedAssertions.assertPayloadContains(response, "data.user.id", userId); // Check if userId is present
+
+        AdvancedAssertions.assertPayloadContains(response, "data.user.id", userId); // Check if userId is present*/
+
+         /*Assert the status code*/
+        assertEquals(responseWrapper.getStatusCode(), 200, "Expected status code to be 200");
+
+        // Assert the headers
+        assertTrue(responseWrapper.getHeaders().containsKey("Content-Type"));
+        assertEquals(responseWrapper.getHeaders().get("Content-Type"), "application/json");
+
+        // Assert the response body fields
+        assertNotNull(signupResponse.getUserId(), "User ID should not be null");
+        assertNotNull(signupResponse.getToken(), "Token should not be null");
     }
 
     @AfterMethod
