@@ -77,8 +77,6 @@ public class UserClient {
 
         return ApiResponseDeserializer.deserializeResponse(response, LoginResponseModel.class);
 
-
-
     }
 
     // New method to delete a user by userId
