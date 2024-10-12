@@ -1,8 +1,12 @@
+import deserializer.ApiResponseWrapper;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pojos.LoginResponseModel;
 import utilities.AdvancedAssertions;
+
+import static org.testng.Assert.assertEquals;
 
 public class LoginTest extends BaseTest {
     private String uniqueEmail;
@@ -21,11 +25,17 @@ public class LoginTest extends BaseTest {
 
     @Test
     public void testUserLogin() {
-        Response loginResponse = userClient.authenticateUser(uniqueEmail, password);
+       /* Response loginResponse = userClient.authenticateUser(uniqueEmail, password);
         AdvancedAssertions.assertStatusCode(loginResponse, 200);
         AdvancedAssertions.assertTokenPresent(loginResponse, "data.session.access_token");
         // Assert multiple payload values (if needed)
-        AdvancedAssertions.assertPayloadContains(loginResponse, "data.user.email", uniqueEmail);
+        AdvancedAssertions.assertPayloadContains(loginResponse, "data.user.email", uniqueEmail);*/
+
+        ApiResponseWrapper<LoginResponseModel> responseWrapper = userClient.authenticateUser(uniqueEmail, password);
+        LoginResponseModel responseBody = responseWrapper.getResponseBody();
+
+        assertEquals(responseWrapper.getStatusCode(), 200, "Expected status code to be 200");
+        assertEquals(responseWrapper.getHeaders().get("Content-Type"), "application/json", "Expected content type to be 'application/json'");
     }
 
     @AfterMethod

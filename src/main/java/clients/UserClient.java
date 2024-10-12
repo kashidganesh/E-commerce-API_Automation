@@ -25,7 +25,11 @@ public class UserClient {
     // Method to get the single instance of UserClient
     public static UserClient getInstance() {
         if (instance == null) {
-            instance = new UserClient();
+            synchronized (UserClient.class) {
+                if (instance == null) {
+                    instance = new UserClient();
+                }
+            }
         }
         return instance;
     }
