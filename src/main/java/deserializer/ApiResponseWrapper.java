@@ -1,8 +1,11 @@
 package deserializer;
 
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
+
 import java.util.Map;
 
-public class ApiResponseWrapper <T>{
+public abstract class ApiResponseWrapper <T> implements Response {
     private int statusCode;
     private Map<String, String> headers;
     private T responseBody;
@@ -14,7 +17,7 @@ public class ApiResponseWrapper <T>{
 
     // Getters
     public int getStatusCode() { return statusCode; }
-    public Map<String, String> getHeaders() { return headers; }
+    public Headers getHeaders() { return headers; }
     public T getResponseBody() { return responseBody; }
 
 }

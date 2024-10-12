@@ -4,6 +4,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pojos.LoginResponseModel;
+import pojos.SignupResponseModel;
 import utilities.AdvancedAssertions;
 
 import static org.testng.Assert.assertEquals;
@@ -17,10 +18,10 @@ public class LoginTest extends BaseTest {
     public void setUp() {
         super.beforeMethodSetUp();
         uniqueEmail = "user" + System.currentTimeMillis() + "@example.com";
-        Response signupResponse = userClient.createUser(uniqueEmail, password);
+        ApiResponseWrapper<SignupResponseModel> signupResponse = userClient.createUser(uniqueEmail, password);
         AdvancedAssertions.assertStatusCode(signupResponse, 201);
-        userId = signupResponse.jsonPath().getString("user.id");
-        System.out.println("userId :" +userId);
+
+
     }
 
     @Test

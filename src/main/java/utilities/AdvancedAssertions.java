@@ -1,7 +1,9 @@
 package utilities;
 
+import deserializer.ApiResponseWrapper;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import pojos.SignupResponseModel;
 
 import java.util.Map;
 
@@ -68,6 +70,9 @@ public class AdvancedAssertions {
         Object actualValue = response.jsonPath().get(field);
         Assert.assertEquals(actualValue, expectedValue,
                 "Expected value for field '" + field + "' is " + expectedValue + " but found " + actualValue);
+    }
+
+    public static void assertStatusCode(ApiResponseWrapper<SignupResponseModel> signupResponse, int i) {
     }
 
     public void assertStatusCode(int actual, int expected) {

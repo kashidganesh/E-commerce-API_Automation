@@ -46,29 +46,11 @@ public class UserClient {
       // Use the custom deserializer
         return signupDeserializer.deserializeResponse(response);
 
-     /*   UserSignupRequest signupRequest1 = UserSignupRequest.builder()
-                .email(email)
-                .password(password)
-                .build();
-
-        return given().contentType(ContentType.JSON)
-                .body(signupRequest)  // Serialize POJO to JSON here
-                .when()
-                .post("/api/auth/signup");*/
-        // Send POST request to /signup endpoint
 
     }
 
     // Method to authenticate an existing user (login)
-    public ApiResponseWrapper<LoginResponseModel> authenticateUser(String email, String password) {
-    /*    String requestBody = "{\n" +
-                "\"email\":\"" + email + "\",\n" +
-                "\"password\":\"" + password + "\"\n" +
-                "}";
-        return RestAssured.given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .post("/api/auth/login");*/
+    public ApiResponseWrapper authenticateUser(String email, String password) {
 
         UserLoginRequest loginRequest = UserLoginRequest.builder()
                 .email(email)
@@ -80,6 +62,7 @@ public class UserClient {
                 .when().post("/api/auth/login");
 
         return ApiResponseDeserializer.deserializeResponse(response, LoginResponseModel.class);
+
 
     }
 

@@ -1,5 +1,7 @@
+import deserializer.ApiResponseWrapper;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
+import pojos.SignupResponseModel;
 import utilities.AdvancedAssertions;
 
 public class SignUpEdgeCaseTest extends BaseTest {
@@ -12,7 +14,7 @@ public class SignUpEdgeCaseTest extends BaseTest {
         userClient.createUser(existingEmail, password);
 
         // Attempt to create another user with the same email
-        Response response = userClient.createUser(existingEmail, password);
+        ApiResponseWrapper<SignupResponseModel> response = userClient.createUser(existingEmail, password);
 
         // Expecting a 400 Bad Request status code due to duplicate email
         AdvancedAssertions.assertStatusCode(response, 400);

@@ -2,42 +2,47 @@ package deserializer;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
+import pojos.LoginResponseModel;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static io.restassured.RestAssured.given;
+
 public class ApiResponseDeserializer<T> {
     private ObjectMapper objectMapper;
-    private final Class<T> responseClass;
+    private final Class<T> responseType;
 
     // Constructor that accepts the class type for deserialization
     public ApiResponseDeserializer(Class<T> responseClass) {
-        this.responseClass = responseClass;
+        this.responseType = responseClass;
         this.objectMapper = new ObjectMapper();
     }
 
+    public static ApiResponseWrapper deserializeResponse(Response response, Class<LoginResponseModel> loginResponseModelClass) {
+
+        return null;
+    }
+
     // Method to handle the complete deserialization process
-    public T deserializeResponse(Response response) {
+    public ApiResponseWrapper<T> deserializeResponse(Response response) {
         try {
 
-            T responseBody = objectMapper.readValue(response.getBody().asString(), responseClass);
-
-            // You can add custom logic to deserialize headers and status codes if required
             int statusCode = response.getStatusCode();
             Map<String, String> headers = response.getHeaders().asList().stream()
-                    .collect(Collectors.toMap(h -> h.getName(), h -> h.getValue()));
+                    .collect(Collectors.toMap(Header::getName, Header::getValue));
 
-            // Check for response structure validation if needed (status code, headers)
-            validateResponse(statusCode, headers);
+            T responseBody = response.as(responseType);
 
-            return responseBody;
+            return new ApiResponseWrapper<>(statusCode, headers, responseBody);
 
 
         } catch (Exception e) {
             // Handle errors with informative messages
             throw new RuntimeException("Failed to deserialize the API response for class: " +
-                    responseClass.getSimpleName() + ". Error: " + e.getMessage() +
+                    responseType.getSimpleName() + ". Error: " + e.getMessage() +
                     ". Response Body: " + response.getBody().asString(), e);
         }
 
@@ -53,7 +58,5 @@ public class ApiResponseDeserializer<T> {
             throw new RuntimeException("Missing or incorrect 'Content-Type' header. Expected 'application/json'.");
         }
     }
-
-
 
 }
