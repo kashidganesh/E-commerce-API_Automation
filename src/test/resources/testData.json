@@ -1,0 +1,16 @@
+{
+  "testData": {
+    "validUser": {
+      "email": "valid@example.com",
+      "password": "validPassword123"
+    },
+    "existingUser": {
+      "email": "existing@example.com",
+      "password": "existingPassword123"
+    },
+    "invalidUser": {
+      "email": "invalid",
+      "password": "inv"
+    }
+  }
+}
